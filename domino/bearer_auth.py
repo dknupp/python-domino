@@ -11,7 +11,7 @@ class BearerAuth(AuthBase):
 
     @classmethod
     def from_token_file(cls, path_token_to_file):
-        with open(self.path_token_to_file, 'r') as token_file:
+        with open(path_token_to_file, 'r') as token_file:
             auth_token = token_file.readline().rstrip()
             return cls(auth_token)
 
