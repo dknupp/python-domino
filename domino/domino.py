@@ -3,7 +3,7 @@ from typing import Optional
 from .routes import _Routes
 from .helpers import *
 from .http_request_manager import _HttpRequestManager
-from .bearer_auth import DominoAuth
+from .bearer_auth import get_auth_by_type
 from .exceptions import *
 
 from domino._version import __version__
@@ -81,7 +81,7 @@ class Domino:
                   (f"Unable to authenticate: no authentication value provided in "
                    f"{pprint.pformat(auth_types)}")
 
-        self._request_manager = _HttpRequestManager(DominoAuth(**auth_types))
+        self._request_manager = _HttpRequestManager(get_auth_by_type(**auth_types))
 
     def commits_list(self):
         url = self._routes.commits_list()

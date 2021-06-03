@@ -1,28 +1,19 @@
 from requests.auth import AuthBase, HTTPBasicAuth
 
 
-class DominoAuth(AuthBase):
+class BearerAuth(AuthBase):
     """
-    Class for authenticating requests by various user supplied credentials.
+    Class for authenticating requests by user supplied token.
     """
 
-    def __init__(self, api_key, auth_token, domino_token_file):
-        self._api_key = api_key
-        self._auth_token = auth_token
-        self._domino_token_file = domino_token_file
+    def __init__(self, auth_token):
+        self.auth_token = auth_token
 
-    @property
-    def auth_token(self):
-        """
-        Return the auth_token as the preferred credential type.
-
-        Can be supplied as a string, or read from a file.
-        """
-        if self._auth_token is None:
-            if self._domino_token_file:
-                with open(self._domino_token_file, 'r') as token_file:
-                    self._auth_token = token_file.readline().rstrip()
-        return self._auth_token
+    @classmethod
+    def from_token_file(cls, path_token_to_file):
+        with open(self.path_token_to_file, 'r') as token_file:
+            auth_token = token_file.readline().rstrip()
+            return cls(auth_token)
 
     def __call__(self, r):
         """
@@ -31,12 +22,14 @@ class DominoAuth(AuthBase):
         More more info, see:
         https://docs.python-requests.org/en/master/user/advanced/
         """
-        if self.auth_token:
-            r.headers["Authorization"] = "Bearer " + self.auth_token
-            return r
-        elif self._api_key:
-            # Authenticating via API key is a fallback option
-            return HTTPBasicAuth('', self._api_key)
-        else:
-            # This will presumably result in an exception being thrown sometime later
-            return None
+        r.headers["Authorization"] = "Bearer " + self.auth_token
+        return r
+
+
+def get_auth_by_type(api_key=None, auth_token=None, domino_token_file=None):
+    if auth_token is not None:
+        return BearerAuth(auth_token)
+    elif domino_token_file is not None:
+        return BearerAuth.from_token_file(domino_token_file)
+    else:
+        return HTTPBasicAuth('', api_key)
