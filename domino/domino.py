@@ -40,7 +40,7 @@ class Domino:
 
         # Authenticate request manager
         self._request_manager = None
-        self.authenticate_request_manager(api_key, auth_token, domino_token_file)
+        self.authenticate(api_key, auth_token, domino_token_file)
 
         # Get version
         self._version = self.deployment_version().get("version")
@@ -72,7 +72,7 @@ class Domino:
         logging.basicConfig(level=logging_level)
         self._logger = logging.getLogger(__name__)
 
-    def authenticate_request_manager(self, api_key=None, auth_token=None, domino_token_file=None):
+    def authenticate(self, api_key=None, auth_token=None, domino_token_file=None):
         """
         """
         auth_types = {"api_key": api_key,
