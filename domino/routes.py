@@ -28,17 +28,23 @@ class _Routes:
     def project_create(self):
         return self.host + '/project'
 
-    def workspace_list_or_create(self, project_id):
+    def workspace_create(self, project_id):
         return f'{self.host}/v4/workspace/project/{project_id}/workspace'
+
+    def workspace_list(self, project_id):
+        return f'{self.host}/v4/workspace/project/{project_id}/workspace'
+
+    def workspace_get(self, project_id, workspace_id):
+        return f"{self.host}/v4/workspace/project/{project_id}/workspace/{workspace_id}"
+
+    def workspace_delete(self, project_id, workspace_id):
+        return f"{self.host}/v4/workspace/project/{project_id}/workspace/{workspace_id}"
 
     def workspace_stop_session(self, project_id, workspace_id):
         return f"{self.host}/v4/workspace/project/{project_id}/workspace/{workspace_id}/stop"
 
     def workspace_start_session(self, project_id, workspace_id):
         return f"{self.host}/v4/workspace/project/{project_id}/workspace/{workspace_id}/sessions"
-
-    def workspace_delete(self, project_id, workspace_id):
-        return f"{self.host}/v4/workspace/project/{project_id}/workspace/{workspace_id}"
 
     def projects_list(self):
         return f'{self.host}/v4/gateway/projects'
