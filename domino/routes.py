@@ -85,7 +85,7 @@ class _Routes:
     def collaborators_remove(self, project_id, user_id):
         return self.host + f'/v4/projects/{project_id}/collaborators/{user_id}'
 
-    # API Endpoint URLs 
+    # API Endpoint URLs
     def _build_endpoint_url(self):
         return self.host + '/v1/' + \
             self._owner_username + '/' + self._project_name + '/endpoint'
@@ -142,6 +142,9 @@ class _Routes:
     def job_status(self, job_id):
         return f'{self.host}/v4/jobs/{job_id}'
 
+    def jobs_list(self):
+        return f'{self.host}/v4/jobs'
+
     def default_spark_setting(self, project_id):
         return f'{self.host}/v4/jobs/project/{project_id}/defaultSparkSettings'
 
@@ -163,7 +166,7 @@ class _Routes:
 
     def app_get(self, app_id):
         return f'{self.host}/v4/modelProducts/{app_id}'
-    
+
     # Hardware Tier URLs
     def hardware_tiers_list(self, project_id):
         return self.host + f'/v4/projects/{project_id}/hardwareTiers'
