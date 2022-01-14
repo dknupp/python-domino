@@ -387,11 +387,12 @@ class Domino:
 
         spark_cluster_properties = None
         validated_compute_cluster_properties = None
+        hardware_tier_id = self.get_hardware_tier_id_from_name(hardware_tier_name))
 
         if commit_id is not None:
             self._validate_commit_id(commit_id)
-        if hardware_tier_name is not None:
-            self._validate_hardware_tier_name(hardware_tier_name)
+        if hardware_tier_id is not None:
+            self._validate_hardware_tier_id(hardware_tier_id)
         if environment_id is not None:
             self._validate_environment_id(environment_id)
         if external_volume_mounts is not None:
@@ -430,7 +431,7 @@ class Domino:
           "projectId": self._project_id,
           "commandToRun": command,
           "commitId": commit_id,
-          "overrideHardwareTierName": hardware_tier_name,
+          "overrideHardwareTierId": hardware_tier_id,
           "onDemandSparkClusterProperties": spark_cluster_properties,
           "computeClusterProperties": validated_compute_cluster_properties,
           "environmentId": environment_id,
@@ -818,6 +819,12 @@ class Domino:
         url = self._routes.hardware_tiers_list(self._project_id)
         return self._get(url)
 
+    def get_hardware_tier_id_from_name(self):
+        for hardware_tier in self.hardware_tiers_list():
+            if hardware_tier_name == hardware_tier['hardwareTier']['name']:
+                return hardware_tier['hardwareTier']['id']
+        return None
+
     def process_log(self, log):
         """
         spool out and replay entire log using bs4 to strip the HTML tags
@@ -853,7 +860,7 @@ class Domino:
         raise HardwareTierNotFoundException(f"{hardware_tier_id} hardware tier Id not found")
 
     def _validate_hardware_tier_name(self, hardware_tier_name):
-        self.log.debug(f"Validating hardware tier id: {hardware_tier_name}")
+        self.log.debug(f"Validating hardware tier name: {hardware_tier_name}")
         for hardware_tier in self.hardware_tiers_list():
             if hardware_tier_name == hardware_tier['hardwareTier']['name']:
                 return True
